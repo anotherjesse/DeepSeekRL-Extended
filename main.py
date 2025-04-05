@@ -8,7 +8,6 @@ import argparse
 from tqdm import tqdm
 from collections import defaultdict
 from transformers import PreTrainedModel, PreTrainedTokenizerBase, GenerationConfig
-from model_interface import ModelInterface
 
 import llms
 import utils
@@ -515,9 +514,13 @@ if __name__ == "__main__":
     utils.seed_everything(args.seed)
 
     # Set device and enable bf16
-    device = "cuda" if torch.cuda.is_available() else "cpu"
-    torch.backends.cuda.matmul.allow_bf16_reduced_precision_reduction = True
-    torch.set_float32_matmul_precision('high') 
+    device = "cpu"
+    if torch.cuda.is_available():
+        device = "cuda"
+        torch.backends.cuda.matmul.allow_bf16_reduced_precision_reduction = True
+        torch.set_float32_matmul_precision('high') 
+    elif torch.backends.mps.is_available():
+        device = "mps"
 
     ## Set which model to train 
     model, tokenizer = llms.get_llm_tokenizer(args.model_name, device)

@@ -27,10 +27,15 @@ def get_llm_tokenizer(model_name: str, device: str) -> tuple[PreTrainedModel, Pr
     #     device_map=None, 
     # ).to(device)
 
+    if device == "mps":
+        attn_implementation = "sdpa"
+    else:
+        attn_implementation = "flash_attention_2"
+
     model = AutoModelForCausalLM.from_pretrained(
         model_name,
         torch_dtype=torch.bfloat16,
-        attn_implementation="flash_attention_2",
+        attn_implementation=attn_implementation,
         device_map="auto", 
     )
     

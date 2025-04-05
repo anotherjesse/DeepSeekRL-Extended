@@ -2,11 +2,18 @@
 Abstract interface for language models and their implementations.
 """
 import time
-import torch
-import openai
-import anthropic
+try:
+    import openai
+except ImportError:
+    print("OpenAI not installed")
+    pass
+try:
+    import anthropic
+except ImportError:
+    print("Anthropic not installed")
+    pass
 from abc import ABC, abstractmethod
-from typing import List, Dict, Optional
+from typing import List, Dict
 from transformers import PreTrainedModel, PreTrainedTokenizerBase
 
 class ModelInterface(ABC):

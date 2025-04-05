@@ -8,7 +8,6 @@ import argparse
 from tqdm import tqdm
 from collections import defaultdict
 from transformers import PreTrainedModel, PreTrainedTokenizerBase, GenerationConfig
-from model_interface import ModelInterface
 
 import llms
 import utils
