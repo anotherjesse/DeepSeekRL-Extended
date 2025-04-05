@@ -2,6 +2,7 @@
 Implementation of GRPO, DeepSeek style training without external libraries 
 """
 import os
+os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "1"
 import json
 import torch
 import argparse
@@ -604,7 +605,7 @@ if __name__ == "__main__":
     for round_num in tqdm(range(start_round, args.num_train_iters), desc="Training Progress"):
         print(f"Round {round_num}")
         # Evaluate on test set every so often 
-        if round_num % args.eval_iterations == 0:
+        if round_num % args.eval_iterations == 0 and round_num != 0:
             eval_metrics, eval_accuracy = eval_on_test_set(
                 all_models=all_models,
                 test_loader=test_loader,
@@ -668,5 +669,5 @@ if __name__ == "__main__":
             json.dump(train_metrics_total, f, indent=4)
 
         # Add after each major operation in the training loop
-        torch.cuda.empty_cache()
+        utils.clear_cache(device)
     

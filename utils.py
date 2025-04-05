@@ -39,6 +39,12 @@ def seed_everything(seed: int) -> None:
         torch.backends.cudnn.benchmark = False
 
 
+def clear_cache(device: str) -> None:
+    if device == "cuda":
+        torch.cuda.empty_cache()
+    elif device == "mps":
+        torch.mps.empty_cache()
+
 
 def write_generation_log(log_data: Dict[str, Any], log_file: str) -> None:
     """
