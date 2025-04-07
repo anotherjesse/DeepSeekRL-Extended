@@ -136,13 +136,13 @@ def eval_on_test_set(
 
             # Log summary metrics for this question
             f.write("\nSUMMARY METRICS:\n")
-            f.write(f"Win rate: {reward_metrics['win_rate']:.2%}\n")
-            f.write(f"Number of wins: {reward_metrics['num_wins']}\n")
-            f.write(f"Total comparisons: {reward_metrics['num_comparisons']}\n")
+            f.write(f"Win rate: {reward_metrics.get('win_rate', 'missing')}\n")
+            f.write(f"Number of wins: {reward_metrics.get('num_wins', 'missing')}\n")
+            f.write(f"Total comparisons: {reward_metrics.get('num_comparisons', 'missing')}\n")
             f.write(f"Average format scores:\n")
-            f.write(f"  Strict format: {reward_metrics['rewards/strict_format']:.4f}\n")
-            f.write(f"  Soft format: {reward_metrics['rewards/soft_format']:.4f}\n")
-            f.write(f"  XML count: {reward_metrics['rewards/xml_count']:.4f}\n")
+            f.write(f"  Strict format: {reward_metrics.get('rewards/strict_format', 'missing')}\n")
+            f.write(f"  Soft format: {reward_metrics.get('rewards/soft_format', 'missing')}\n")
+            f.write(f"  XML count: {reward_metrics.get('rewards/xml_count', 'missing')}\n")
 
             # Update total scores
             for k, v in reward_metrics.items():
@@ -605,7 +605,7 @@ if __name__ == "__main__":
     for round_num in tqdm(range(start_round, args.num_train_iters), desc="Training Progress"):
         print(f"Round {round_num}")
         # Evaluate on test set every so often 
-        if round_num % args.eval_iterations == 0 and round_num != 0:
+        if round_num % args.eval_iterations == 0:
             eval_metrics, eval_accuracy = eval_on_test_set(
                 all_models=all_models,
                 test_loader=test_loader,
